@@ -1,4 +1,6 @@
-import { Server, Request, ResponseToolkit } from '@hapi/hapi'
+import { Server } from '@hapi/hapi'
+
+import { searchHandler } from './controllers/searchController'
 
 const init = async () => {
     const server = new Server({
@@ -9,9 +11,7 @@ const init = async () => {
     server.route({
         method: 'GET',
         path: '/',
-        handler: (request: Request, h: ResponseToolkit) => {
-            return 'Hello World!'
-        }
+        handler: searchHandler
     })
 
     await server.start()
