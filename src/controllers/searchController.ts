@@ -2,20 +2,22 @@ import { Boom } from '@hapi/boom'
 import { Request, ResponseToolkit } from '@hapi/hapi'
 
 import { RESSOURCES } from '../constants/swapi'
+import { SearchResult, SwapiResultItems } from '../types/search'
+import { searchItemFormatters } from '../utils/swapiFormatter'
 import { searchSwapi } from '../utils/swapiClient'
 
 export async function searchHandler(request: Request, h: ResponseToolkit) {
     try {
         const { keyword, type } = request.query
         const ressources = Object.values(RESSOURCES)
-        const response = ressources.reduce((responseObject, key) => {
+        const results = ressources.reduce((responseObject, key) => {
             responseObject[key] = null
 
             return responseObject
-        }, {} as { [key in RESSOURCES]: any })
+        }, {} as { [key in RESSOURCES]: SearchResult<SwapiResultItems> | null })
 
         if (type) {
-            response[<RESSOURCES>type] = await searchSwapi(type, keyword)
+            results[type as RESSOURCES] = await searchSwapi(type, keyword)
         } else {
             const searchRessource = async (ressource: RESSOURCES) => ({
                 ressource,
@@ -25,11 +27,28 @@ export async function searchHandler(request: Request, h: ResponseToolkit) {
                 ressources.map((ressource) => searchRessource(ressource))
             )
             searches.forEach(
-                ({ ressource, data }) => (response[ressource] = data)
+                ({ ressource, data }) => (results[ressource] = data)
             )
         }
 
-        return response
+        return Object.keys(results).reduce((formatedResults, key) => {
+            const ressource = key as RESSOURCES
+            const ressourceResults = results[ressource]
+            if (ressourceResults) {
+                formatedResults[ressource] = {
+                    ...ressourceResults,
+                    results: (ressourceResults.results as Array<
+                        any
+                    >).map((item: any) =>
+                        searchItemFormatters[key as RESSOURCES](item)
+                    )
+                }
+            } else {
+                formatedResults[ressource] = null
+            }
+
+            return formatedResults
+        }, {} as { [key in RESSOURCES]: SearchResult<SwapiResultItems> | null })
     } catch (e) {
         return new Boom('An error occured')
     }

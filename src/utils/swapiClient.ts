@@ -3,11 +3,12 @@ import { stringify } from 'querystring'
 
 import * as config from '../../config.json'
 import { RESSOURCES } from '../constants/swapi'
+import { SearchResult, SwapiResultItems } from '../types/search'
 
-export async function searchSwapi<T>(
+export async function searchSwapi(
     ressource: RESSOURCES,
     keyword: string
-): Promise<T | null> {
+): Promise<SearchResult<SwapiResultItems> | null> {
     try {
         return (
             await fetch(
