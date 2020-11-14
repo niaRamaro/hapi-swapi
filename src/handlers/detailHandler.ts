@@ -5,7 +5,7 @@ import { Request, ResponseToolkit } from '@hapi/hapi'
 import { RESSOURCES } from '../constants/swapi'
 import { Relation, RELATIONS } from '../constants/swapi'
 import { SwapiDetail } from '../types/search'
-import { getDetailSwapi } from '../utils/swapiClient'
+import { getDetailSwapi, getSwapi } from '../utils/swapiClient'
 import { getIdFromUrl } from '../utils/swapiFormatter'
 
 type RelationUrls = { [key: string]: string[] }
@@ -78,11 +78,7 @@ export async function detailHandler(request: Request, h: ResponseToolkit) {
             relationKeys: string[]
         ): Promise<SwapiDetail | null> {
             try {
-                const relation = await (
-                    await fetch(url, {
-                        redirect: 'follow'
-                    })
-                ).json()
+                const relation = await getSwapi<any>(url)
 
                 relationKeys.forEach((key) => delete relation[key])
                 relation.id = getIdFromUrl(relation.url)
