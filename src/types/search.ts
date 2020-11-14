@@ -1,9 +1,9 @@
-import { BaseFilm } from './Film'
-import { BasePerson } from './person'
-import { BasePlanet } from './planet'
-import { BaseSpecies } from './species'
-import { BaseStarship } from './starship'
-import { BaseVehicle } from './Vehicle'
+import { BaseFilm, FullFilm } from './Film'
+import { BasePerson, FullPerson } from './person'
+import { BasePlanet, FullPlanet } from './planet'
+import { BaseSpecies, FullSpecies } from './species'
+import { BaseStarship, FullStarship } from './starship'
+import { BaseVehicle, FullVehicle } from './Vehicle'
 
 export type SearchResult<T> = {
     count: number
@@ -19,3 +19,11 @@ export type SwapiResultItems =
     | BaseSpecies[]
     | BaseStarship[]
     | BaseVehicle[]
+
+export type SwapiDetail =
+    | FullFilm
+    | FullPerson
+    | FullPlanet
+    | FullSpecies
+    | FullStarship
+    | FullVehicle

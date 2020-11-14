@@ -1,6 +1,9 @@
 import { Server } from '@hapi/hapi'
+import Joi from '@hapi/joi'
 
-import { searchHandler } from './controllers/searchController'
+import { RESSOURCES } from './constants/swapi'
+import { detailHandler } from './handlers/detailHandler'
+import { searchHandler } from './handlers/searchHandler'
 
 const init = async () => {
     const server = new Server({
@@ -8,11 +11,26 @@ const init = async () => {
         host: 'localhost'
     })
 
-    server.route({
-        method: 'GET',
-        path: '/',
-        handler: searchHandler
-    })
+    server.route([
+        {
+            method: 'GET',
+            path: '/',
+            handler: searchHandler
+        },
+        {
+            method: 'GET',
+            path: '/{type}/{id}',
+            handler: detailHandler,
+            options: {
+                validate: {
+                    params: <any>Joi.object({
+                        type: Joi.string().valid(...Object.values(RESSOURCES)),
+                        id: Joi.number()
+                    })
+                }
+            }
+        }
+    ])
 
     await server.start()
     console.log('Server running on %s', server.info.uri)

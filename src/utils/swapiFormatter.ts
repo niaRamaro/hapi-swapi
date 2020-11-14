@@ -14,7 +14,7 @@ export const searchItemFormatters: {
     [RESSOURCES.VEHICLES]: ({ name, url }) => ({ name, id: getIdFromUrl(url) })
 }
 
-function getIdFromUrl(url: string): number {
+export function getIdFromUrl(url: string): number {
     const urlParts = url.split('/').filter((part) => part)
 
     return +urlParts[urlParts.length - 1]
