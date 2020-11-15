@@ -3,16 +3,12 @@ import { FullPerson } from './person'
 import { FullPlanet } from './planet'
 import { FullSpecies } from './species'
 import { FullStarship } from './starship'
-import { FullVehicle } from './Vehicle'
+import { FullVehicle } from './vehicle'
 
-export type BaseFilm = {
-    title: string
-    id: number
-}
-
-export type FullFilm = BaseFilm &
-    CommonRessourceFields &
+export type FullFilm = CommonRessourceFields &
     FilmRelations & {
+        id: number
+        title: string
         episode_id: number
         opening_crawl: string
         director: string

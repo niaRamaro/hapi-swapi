@@ -1,15 +1,11 @@
 import { CommonRessourceFields } from './common'
-import { FullFilm } from './Film'
+import { FullFilm } from './film'
 import { FullPerson } from './person'
 
-export type BaseStarship = {
-    name: string
-    id: number
-}
-
-export type FullStarship = BaseStarship &
-    CommonRessourceFields &
+export type FullStarship = CommonRessourceFields &
     StarshipRelations & {
+        id: number
+        name: string
         model: string
         starship_class: string
         manufacturer: string

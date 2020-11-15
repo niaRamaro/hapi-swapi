@@ -3,7 +3,7 @@ import { stringify } from 'querystring'
 
 import * as config from '../../config.json'
 import { RESSOURCES } from '../constants/swapi'
-import { SearchResult, SwapiDetail, SwapiResultItems } from '../types/search'
+import { SearchResult, SwapiDetail } from '../types/search'
 import { hasCache, getCache, setCache } from './swapiCache'
 
 export async function getSwapi<T>(url: string): Promise<T> {
@@ -24,7 +24,7 @@ export async function getSwapi<T>(url: string): Promise<T> {
 export async function searchSwapi(
     ressource: RESSOURCES,
     keyword: string
-): Promise<SearchResult<SwapiResultItems> | null> {
+): Promise<SearchResult | null> {
     try {
         const url = `${config.api_url}/${ressource}?${stringify({
             search: keyword

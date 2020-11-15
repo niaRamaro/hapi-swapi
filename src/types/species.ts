@@ -1,15 +1,11 @@
 import { CommonRessourceFields } from './common'
-import { FullFilm } from './Film'
+import { FullFilm } from './film'
 import { FullPerson } from './person'
 
-export type BaseSpecies = {
-    name: string
-    id: number
-}
-
-export type FullSpecies = BaseSpecies &
-    CommonRessourceFields &
+export type FullSpecies = CommonRessourceFields &
     SpeciesRelations & {
+        id: number
+        name: string
         classification: string
         designation: string
         average_height: string

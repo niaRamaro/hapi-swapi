@@ -2,12 +2,12 @@ import { Boom } from '@hapi/boom'
 import { Request, ResponseToolkit } from '@hapi/hapi'
 
 import { RESSOURCES } from '../constants/swapi'
-import { SearchResult, SwapiResultItems } from '../types/search'
+import { SearchResult } from '../types/search'
 import { searchItemFormatters } from '../utils/swapiFormatter'
 import { searchSwapi } from '../utils/swapiClient'
 
 type ResultTree = {
-    [key in RESSOURCES]: SearchResult<SwapiResultItems> | null
+    [key in RESSOURCES]: SearchResult | null
 }
 
 export async function searchHandler(request: Request, h: ResponseToolkit) {

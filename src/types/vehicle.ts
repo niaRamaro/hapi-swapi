@@ -2,14 +2,10 @@ import { CommonRessourceFields } from './common'
 import { FullFilm } from './film'
 import { FullPerson } from './person'
 
-export type BaseVehicle = {
-    name: string
-    id: number
-}
-
-export type FullVehicle = BaseVehicle &
-    CommonRessourceFields &
+export type FullVehicle = CommonRessourceFields &
     VehicleRelations & {
+        id: number
+        name: string
         model: string
         vehicle_class: string
         manufacturer: string

@@ -1,15 +1,11 @@
 import { CommonRessourceFields } from './common'
-import { FullFilm } from './Film'
+import { FullFilm } from './film'
 import { FullPerson } from './person'
 
-export type BasePlanet = {
-    name: string
-    id: number
-}
-
-export type FullPlanet = BasePlanet &
-    CommonRessourceFields &
+export type FullPlanet = CommonRessourceFields &
     PlanetRelations & {
+        id: number
+        name: string
         diameter: string
         rotation_period: string
         orbital_period: string

@@ -1,24 +1,21 @@
-import { BaseFilm, FullFilm } from './Film'
-import { BasePerson, FullPerson } from './person'
-import { BasePlanet, FullPlanet } from './planet'
-import { BaseSpecies, FullSpecies } from './species'
-import { BaseStarship, FullStarship } from './starship'
-import { BaseVehicle, FullVehicle } from './Vehicle'
+import { FullFilm } from './film'
+import { FullPerson } from './person'
+import { FullPlanet } from './planet'
+import { FullSpecies } from './species'
+import { FullStarship } from './starship'
+import { FullVehicle } from './vehicle'
 
-export type SearchResult<T> = {
+export type SearchResult = {
     count: number
     next: string
     previous: string
-    results: T
+    results: SwapiResultItem[]
 }
 
-export type SwapiResultItems =
-    | BaseFilm[]
-    | BasePerson[]
-    | BasePlanet[]
-    | BaseSpecies[]
-    | BaseStarship[]
-    | BaseVehicle[]
+export type SwapiResultItem = {
+    name: string
+    id: number
+}
 
 export type SwapiDetail =
     | FullFilm
