@@ -1,5 +1,6 @@
 import { CommonRessourceFields } from './common'
 import { FullFilm } from './film'
+import { FullPlanet } from './planet'
 import { FullSpecies } from './species'
 import { FullStarship } from './starship'
 import { FullVehicle } from './vehicle'
@@ -15,10 +16,10 @@ export type FullPerson = CommonRessourceFields &
         height: string
         mass: string
         skin_color: string
-        homeworld: string
     }
 
 export type PersonRelations = {
+    homeworld: FullPlanet
     films: FullFilm[]
     starships: FullStarship[]
     vehicles: FullVehicle[]

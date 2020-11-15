@@ -1,4 +1,3 @@
-import fetch from 'node-fetch'
 import { Boom } from '@hapi/boom'
 import { Request, ResponseToolkit } from '@hapi/hapi'
 
@@ -40,13 +39,18 @@ export async function detailHandler(request: Request, h: ResponseToolkit) {
         }[] = await Promise.all(
             relationConfigs.map(async ({ key, type }) => {
                 const urls = relationUrls[key]
+                const formatedUrls = urls
+                    ? Array.isArray(urls)
+                        ? urls
+                        : [urls]
+                    : []
                 let relations: Promise<
                     { url: string; relation: SwapiDetail | null }[]
                 > = new Promise((resolve) => resolve([]))
 
-                if (urls?.length) {
+                if (formatedUrls.length) {
                     relations = Promise.all(
-                        urls.map(async (url) => ({
+                        formatedUrls.map(async (url) => ({
                             url,
                             relation: await fetchRelation(
                                 url,
@@ -103,9 +107,14 @@ export async function detailHandler(request: Request, h: ResponseToolkit) {
                 )
                 if (isRelationKey) {
                     const relationUrls: string[] = ressource[ressourceKey]
-                    formatedRessource[ressourceKey] = relationUrls.map(
-                        (url) => relationsTree[ressourceKey][url]
-                    )
+                    if (Array.isArray(relationUrls)) {
+                        formatedRessource[ressourceKey] = relationUrls.map(
+                            (url) => relationsTree[ressourceKey][url]
+                        )
+                    } else {
+                        formatedRessource[ressourceKey] =
+                            relationsTree[ressourceKey][relationUrls]
+                    }
                 } else {
                     formatedRessource[ressourceKey] = ressource[ressourceKey]
                 }

@@ -54,6 +54,10 @@ export const RELATIONS: {
         {
             key: 'species',
             type: RESSOURCES.SPECIES
+        },
+        {
+            key: 'homeworld',
+            type: RESSOURCES.PLANETS
         }
     ],
     [RESSOURCES.PLANETS]: [
@@ -74,6 +78,10 @@ export const RELATIONS: {
         {
             key: 'films',
             type: RESSOURCES.FILMS
+        },
+        {
+            key: 'homeworld',
+            type: RESSOURCES.PLANETS
         }
     ],
     [RESSOURCES.STARSHIPS]: [
