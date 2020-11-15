@@ -1,27 +1,28 @@
+import { PlanetInfos } from './planet'
+import { SpeciesInfos } from './species'
+import { StarshipInfos } from './starship'
+import { VehicleInfos } from './vehicle'
 import { CommonRessourceFields } from './common'
-import { FullFilm } from './film'
-import { FullPlanet } from './planet'
-import { FullSpecies } from './species'
-import { FullStarship } from './starship'
-import { FullVehicle } from './vehicle'
+import { FilmInfos } from './film'
 
-export type FullPerson = CommonRessourceFields &
-    PersonRelations & {
-        id: number
-        name: string
-        birth_year: string
-        eye_color: string
-        gender: string
-        hair_color: string
-        height: string
-        mass: string
-        skin_color: string
-    }
+export type FullPerson = CommonRessourceFields & PersonRelations & PersonInfos
+
+export type PersonInfos = {
+    id: number
+    name: string
+    birth_year: string
+    eye_color: string
+    gender: string
+    hair_color: string
+    height: string
+    mass: string
+    skin_color: string
+}
 
 export type PersonRelations = {
-    homeworld: FullPlanet
-    films: FullFilm[]
-    starships: FullStarship[]
-    vehicles: FullVehicle[]
-    species: FullSpecies[]
+    films: FilmInfos[]
+    homeworld: PlanetInfos
+    species: SpeciesInfos[]
+    starships: StarshipInfos[]
+    vehicles: VehicleInfos[]
 }

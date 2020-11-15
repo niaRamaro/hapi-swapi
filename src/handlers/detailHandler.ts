@@ -3,12 +3,12 @@ import { Request, ResponseToolkit } from '@hapi/hapi'
 
 import { RESSOURCES } from '../constants/swapi'
 import { Relation, RELATIONS } from '../constants/swapi'
-import { SwapiDetail } from '../types/search'
+import { SwapiDetail, SwapiInfos } from '../types/search'
 import { getDetailSwapi, getSwapi } from '../utils/swapiClient'
 import { getIdFromUrl } from '../utils/swapiFormatter'
 
 type RelationUrls = { [key: string]: string[] }
-type RelationsTree = { [key: string]: { [key: string]: SwapiDetail } }
+type RelationsTree = { [key: string]: { [key: string]: SwapiInfos } }
 
 export async function detailHandler(request: Request, h: ResponseToolkit) {
     try {
@@ -26,7 +26,7 @@ export async function detailHandler(request: Request, h: ResponseToolkit) {
 
         return attachRelations(ressource, relationKeys, relationsTree)
     } catch (e) {
-        return 'An error occured'
+        return new Boom('An error occured')
     }
 
     async function getRelations(
@@ -45,7 +45,7 @@ export async function detailHandler(request: Request, h: ResponseToolkit) {
                         : [urls]
                     : []
                 let relations: Promise<
-                    { url: string; relation: SwapiDetail | null }[]
+                    { url: string; relation: SwapiInfos | null }[]
                 > = new Promise((resolve) => resolve([]))
 
                 if (formatedUrls.length) {
@@ -66,7 +66,7 @@ export async function detailHandler(request: Request, h: ResponseToolkit) {
                         relationMap[item.url] = item.relation
 
                         return relationMap
-                    }, {} as { [key: string]: SwapiDetail | null })
+                    }, {} as { [key: string]: SwapiInfos | null })
                 }
             })
         )
@@ -80,7 +80,7 @@ export async function detailHandler(request: Request, h: ResponseToolkit) {
         async function fetchRelation(
             url: string,
             relationKeys: string[]
-        ): Promise<SwapiDetail | null> {
+        ): Promise<SwapiInfos | null> {
             try {
                 const relation = await getSwapi<any>(url)
 
@@ -99,7 +99,7 @@ export async function detailHandler(request: Request, h: ResponseToolkit) {
         ressource: any,
         relationConfigs: Relation[],
         relationsTree: RelationsTree
-    ): any {
+    ): SwapiDetail {
         return Object.keys(ressource).reduce(
             (formatedRessource, ressourceKey) => {
                 const isRelationKey = !!relationConfigs.find(
