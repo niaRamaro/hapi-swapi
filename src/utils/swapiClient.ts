@@ -23,11 +23,13 @@ export async function getSwapi<T>(url: string): Promise<T> {
 
 export async function searchSwapi(
     ressource: RESSOURCES,
-    keyword: string
+    keyword: string,
+    page: number = 1
 ): Promise<SearchResult | null> {
     try {
         const url = `${config.api_url}/${ressource}?${stringify({
-            search: keyword
+            search: keyword,
+            page: page >= 1 ? page : 1
         })}`
 
         return await getSwapi(url)

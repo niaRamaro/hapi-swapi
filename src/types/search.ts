@@ -12,8 +12,8 @@ export type SearchQuery = {
 
 export type SearchResult = {
     count: number
-    next: string
-    previous: string
+    next: number | string | null
+    previous: number | string | null
     results: SwapiResultItem[]
 }
 

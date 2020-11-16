@@ -12,7 +12,7 @@ type ResultTree = {
 
 export async function searchHandler(request: Request, h: ResponseToolkit) {
     try {
-        const { keyword, type } = request.query
+        const { keyword, type, page } = request.query
         const ressourceTypes = Object.values(RESSOURCES)
         const response = ressourceTypes.reduce((resultPerType, type) => {
             resultPerType[type] = null
@@ -21,7 +21,11 @@ export async function searchHandler(request: Request, h: ResponseToolkit) {
         }, {} as ResultTree)
 
         if (type) {
-            response[type as RESSOURCES] = await searchSwapi(type, keyword)
+            response[type as RESSOURCES] = await searchSwapi(
+                type,
+                keyword,
+                page
+            )
         } else {
             const matches = await searchAllRessources(ressourceTypes, keyword)
             matches.forEach(
@@ -55,6 +59,12 @@ export async function searchHandler(request: Request, h: ResponseToolkit) {
             formatedResultTree[ressourceType] = ressourceResults
                 ? {
                       ...ressourceResults,
+                      previous: getPageFromUrl(
+                          (ressourceResults.previous as string) || ''
+                      ),
+                      next: getPageFromUrl(
+                          (ressourceResults.next as string) || ''
+                      ),
                       results: (ressourceResults.results as Array<
                           any
                       >).map((item: any) =>
@@ -65,5 +75,16 @@ export async function searchHandler(request: Request, h: ResponseToolkit) {
 
             return formatedResultTree
         }, {} as ResultTree)
+    }
+
+    function getPageFromUrl(url: string) {
+        if (url) {
+            const { searchParams } = new URL(url)
+            const page = searchParams.get('page')
+
+            return page ? +page : null
+        }
+
+        return null
     }
 }
