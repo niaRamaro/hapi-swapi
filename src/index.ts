@@ -1,16 +1,27 @@
-import { Server } from '@hapi/hapi'
+import { RouteOptionsCache, Server } from '@hapi/hapi'
 import Joi from '@hapi/joi'
 
 import { RESSOURCES } from './constants/swapi'
 import { detailHandler } from './handlers/detailHandler'
 import { searchHandler } from './handlers/searchHandler'
 
+const env = process.env.NODE_ENV || 'development'
+const port = process.env.PORT || 3001
+const cacheConfig =
+    env === 'production'
+        ? ({
+              expiresIn: 30 * 60 * 1000,
+              privacy: 'private'
+          } as RouteOptionsCache)
+        : false
+
 const init = async () => {
     const server = new Server({
-        port: 3001,
-        host: 'localhost',
+        port,
+        host: '0.0.0.0',
         routes: {
-            cors: true
+            cors: true,
+            cache: cacheConfig
         }
     })
 
